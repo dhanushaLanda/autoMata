@@ -1,4 +1,4 @@
-interface Tuple {
+export interface Tuple {
   states : string[];
   alphabets : string[];
   delta : {};
@@ -14,18 +14,19 @@ export class DFA {
     this.tuple = tuple;
     this.currentState = tuple.startState;
   }
-  private execute (alphabet : any){
-    this.currentState = this.tuple.delta[this.currentState][alphabet];
+
+  protected  execute (alphabet : string, state : string){
+    return this.tuple.delta[state][alphabet];
   }
 
   private isFinalState (state) {
     return this.tuple.finalStates.indexOf(state) > -1 ;
   }
 
-  public doesAccept (string: String) {
-    let allCharsInString = string.split('');
-    allCharsInString.map((char : String) => {
-      this.execute(char);
+  public doesAccept (language: string) {
+    let allCharsInString = language.split('');
+    allCharsInString.map((char : string) => {
+      this.currentState = this.execute(char,this.currentState);
     });
     return this.isFinalState(this.currentState);
   }

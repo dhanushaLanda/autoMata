@@ -14,11 +14,11 @@ describe('DFA',() => {
     dfa = new DFA(tuple);
   });
 
-  it("doesAllow the string with odd number of 0's ",() => {  
-    expect(dfa.doesAccept("00000")).toBeTruthy();
+  it("Should allow the string with odd number of 0's ",() => {  
+    expect(dfa.doesAccept("000001")).toBeTruthy();
   });
 
-  it("doesAllow the string with even number of 0's ",() => {  
-    expect(dfa.doesAccept("0000")).toBeFalsy();
+  it("should not allow the string with even number of 0's ",() => {  
+    expect(dfa.doesAccept("00")).toBeFalsy();
   });
 })
