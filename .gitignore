@@ -6,3 +6,4 @@ bin
 coverage
 styleguide
 .vscode
+src/testCases.json

@@ -1,4 +1,8 @@
+
 import { NFA } from "../src/nfa";
+// import * as cases  from "./testCases";
+import { DFA } from "../src/dfa";
+import * as cases from "./testCases.json";
 
 describe("NFA", () => {
   let nfa 
@@ -36,7 +40,8 @@ describe("NFA", () => {
     }
     nfa = new NFA(tuple);
   })
-  it.only("Should allow even number of 1's in the language" , () => {
-    expect(nfa.doesAccept("01"))
+  it("Should allow even number of 1's in the language" , () => {
+    
+    expect(nfa.doesAccept("01")).toBeTruthy();
   })
 })

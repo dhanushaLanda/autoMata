@@ -15,18 +15,18 @@ export class DFA {
     this.currentState = tuple.startState;
   }
 
-  protected  execute (alphabet : string, state : string){
+  protected  execute (alphabet : string, state : string){        
     return this.tuple.delta[state][alphabet];
   }
 
-  private isFinalState (state) {
+  private isFinalState (state) {    
     return this.tuple.finalStates.indexOf(state) > -1 ;
   }
 
   public doesAccept (language: string) {
     let allCharsInString = language.split('');
-    allCharsInString.map((char : string) => {
-      this.currentState = this.execute(char,this.currentState);
+    allCharsInString.forEach((char : string) => {
+      this.currentState = this.execute(char,this.currentState);      
     });
     return this.isFinalState(this.currentState);
   }
