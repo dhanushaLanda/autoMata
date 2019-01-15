@@ -15,8 +15,9 @@ export class DFA {
     this.currentState = tuple.startState;
   }
 
-  protected  execute (alphabet : string, state : string){        
-    return this.tuple.delta[state][alphabet];
+  protected  execute (alphabet : string, state : string){ 
+    let nextStates = this.tuple.delta[state][alphabet];
+    return nextStates ? nextStates : [];
   }
 
   private isFinalState (state) {    

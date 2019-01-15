@@ -20,11 +20,13 @@ describe("NFA", () => {
       "delta":{  
         "q1":{  
           "0":[  
+            "q2"
+          ],
+          "1":[  
             "q1"
           ],
-          "1":[
-            "q1",
-            "q2"  
+          "e":[  
+            "q2"
           ]
         },
         "q2":{  
@@ -37,11 +39,10 @@ describe("NFA", () => {
       "finalStates":[  
         "q2"
       ]
-    }
+    };
     nfa = new NFA(tuple);
   })
   it("Should allow even number of 1's in the language" , () => {
-    
-    expect(nfa.doesAccept("01")).toBeTruthy();
+    expect(nfa.doesAccept("1111")).toBeTruthy();
   })
 })

@@ -6,7 +6,7 @@ describe.only("EpsilonHandler",() => {
         "e":[  
           "q2",
           "q4"
-        ]
+        ] 
       },
       "q2":{  
         "0":[  

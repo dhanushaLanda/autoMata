@@ -8,7 +8,9 @@ export class EpsilonHandler {
   }
 
   private doesHaveEpsilon ( state ) {
-    return this.configuration[state].hasOwnProperty("e");
+    if (state) {
+      return this.configuration[state].e != undefined;
+    }
   }
 
   private getAllStatesRecuresivly(state,allStates) {
@@ -19,13 +21,13 @@ export class EpsilonHandler {
         this.getAllStatesRecuresivly(epsilonedState,allStates);
       });
     }    
-    return allStates;
+    return allStates; 
   }
 
   public handle (currentStates : string[]) {
     let activeStates :string[] =   [];
     currentStates.forEach(state => {
-      let result = this.getAllStatesRecuresivly(state,activeStates);
+      this.getAllStatesRecuresivly(state,activeStates);
       activeStates.push(state);
     });
     return activeStates;

@@ -1,4 +1,4 @@
-import { DFA, Tuple } from "./dfa";
+import { DFA, Tuple } from "./dfa"; 
 import { EpsilonHandler } from "./epsilonHandler";
 
 export class NFA extends DFA {
@@ -20,7 +20,8 @@ export class NFA extends DFA {
     let nextStates = [];
     this.currentStates = this.handler.handle(this.currentStates);
     this.currentStates.forEach(state => {
-      nextStates = nextStates.concat(this.execute(alphabet,state));
+      let nextState = this.execute(alphabet,state);
+      nextStates = nextStates.concat(nextState);
     });
     this.currentStates = nextStates;
   }
