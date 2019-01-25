@@ -5,6 +5,7 @@ export class EpsilonHandler {
   handledStates : string[];
 
   constructor(configuration) {
+    this.handledStates = [];
     this.configuration = configuration;
   }
 
@@ -13,26 +14,28 @@ export class EpsilonHandler {
       return this.configuration[state].e != undefined;
     }
   }
+  
+  private updateUniqEpsilonedStates (state) {
+    if(!includes(state,this.handledStates) ) {
+      this.handledStates.push(state);
+      this.getNextEpsilonedStates(state);
+    }
+  }
 
-  public getNextEpsilonedStates(state,allStates) {
+  private getNextEpsilonedStates(state) {
     if (this.doesHaveEpsilon(state)){
       let epsilonAppliedStates = this.configuration[state].e;
       epsilonAppliedStates.forEach(epsilonedState => {
-        if(!includes(epsilonedState,allStates) ) {
-          allStates.push(epsilonedState);
-          this.getNextEpsilonedStates(epsilonedState,allStates);
-        }
+        this.updateUniqEpsilonedStates(epsilonedState);
       });
-    }    
-    return allStates; 
+    };
   }
 
   public handle (currentStates : string[]) {
-    let activeStates :string[] =   [];
-    currentStates.forEach(state => {
-      this.getNextEpsilonedStates(state,activeStates);
-      activeStates.push(state);
-    });
-    return activeStates;
+    return currentStates.reduce((nextStates : string[],state) => {
+      this.getNextEpsilonedStates(state);
+      nextStates.push(state);
+      return nextStates;
+    },this.handledStates = []);
   }
 }

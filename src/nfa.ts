@@ -18,7 +18,7 @@ export class NFA {
  
   private execute (alphabet : string ,state : string) {
     let nextStates = this.tuple.delta[state] && this.tuple.delta[state][alphabet];
-    return nextStates ? nextStates : 'dead' ;
+    return nextStates ? nextStates : 'DEAD' ;
   };
 
   private getNextStates (states,alphabet) {
@@ -32,10 +32,12 @@ export class NFA {
   public doesAccept (language : string) {
     let alphabets = language.split('');    
     this.currentStates = [this.tuple.startState];
-    this.currentStates = alphabets.reduce((states,alphabet) => {
+
+    let nextStates = alphabets.reduce((states,alphabet) => {
       return this.getNextStates(states,alphabet); 
     },this.currentStates);
-    this.currentStates = this.epsilonHandler.handle(this.currentStates);
+
+    this.currentStates = this.epsilonHandler.handle(nextStates);
     return this.isSystemInFinalState();
   }
 }
