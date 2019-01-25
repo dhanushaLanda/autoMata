@@ -22,20 +22,18 @@ export class NFA {
   };
 
   private handleAllStates (alphabet) {
-    let nextStates = [];
-    this.currentStates = this.epsilonHandler.handle(this.currentStates);
-    this.currentStates.forEach(state => {
-      let nextState = this.execute(alphabet,state);
-      nextStates = nextStates.concat(nextState);
-    });
-    this.currentStates = nextStates;
+    let epsilonedStates = this.epsilonHandler.handle(this.currentStates);
+    return epsilonedStates.reduce((nextStates : string [],state) => {
+      nextStates.push(this.execute(alphabet,state));
+      return nextStates;
+    },[]);
   }
 
   public doesAccept (language : string) {
     this.currentStates = [this.tuple.startState];
     let alphabets = language.split('');
     alphabets.forEach(alphabet => {
-      this.handleAllStates(alphabet); 
+      this.currentStates=this.handleAllStates(alphabet); 
     });
     return this.isSystemInFinalState();
   }
