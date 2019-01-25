@@ -1,47 +1,32 @@
-import {DFA} from '../src/dfa';
 
-describe('DFA',() => {
-  let tuple, dfa;
+import { DFA } from "../src/dfa";
+import * as cases from "./testCases/dfaTestCases.json";
 
-  beforeEach( () => {
-    tuple = {
-      states: ['q1', 'q2'],
-      alphabets: ['1', '0'],
-      delta: { 'q1': { '0': 'q2', '1': 'q1' }, 'q2': { '0': 'q1', '1': 'q2' } },
-      startState: 'q1',
-      finalStates: ['q2']
-    };
-      
-    tuple = {"states":[  
-      "q1",
-      "q2"
-    ],
-    "alphabets":[  
-      "1",
-      "0"
-    ],
-    "delta":{  
-      "q1":{  
-        "0":"q2",
-        "1":"q1"
-      },
-      "q2":{  
-        "0":"q1",
-        "1":"q2"
-      }
-    },
-    "startState":"q1",
-    "finalStates":[  
-      "q2"
-    ]};
-    dfa = new DFA(tuple);
+const assertTrue = (entity,testCases) => {
+  describe(`Automata type ${entity.constructor.name}`,()=> {
+    return testCases.map((testCase) => {      
+      it(`Should allow "${testCase}"`,() => {
+        expect(entity.doesAccept(testCase)).toBeTruthy();
+      })
+    });
   });
+};
 
-  it("Should allow the string with odd number of 0's ",() => {  
-    expect(dfa.doesAccept("000")).toBeTruthy();
+const assertFalse = (entity,testCases) => {
+  describe(`Automata type ${entity.constructor.name}`,()=> {
+    return testCases.map( (testCase) => {
+      it(`Should not allow "${testCase}"`,() => {
+        expect(entity.doesAccept(testCase)).toBeFalsy();
+      })
+    });
   });
+};
+const runAllDfaTests = () => {
+  return cases.default.map((testCase) => {
+    let dfa = new DFA(testCase.tuple);
+    assertTrue(dfa,testCase["pass-cases"]);
+    assertFalse(dfa,testCase["fail-cases"])
+  })
+};
 
-  it("should not allow the string with even number of 0's ",() => {  
-    expect(dfa.doesAccept("00")).toBeFalsy();
-  });
-})
+runAllDfaTests();

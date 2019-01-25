@@ -15,9 +15,8 @@ export class DFA {
     this.currentState = tuple.startState;
   }
 
-  protected  execute (alphabet : string, state : string){ 
-    let nextStates = this.tuple.delta[state][alphabet];
-    return nextStates ? nextStates : [];
+  protected  execute (alphabet : string){ 
+    this.currentState = this.tuple.delta[this.currentState][alphabet];
   }
 
   private isFinalState (state) {    
@@ -25,9 +24,10 @@ export class DFA {
   }
 
   public doesAccept (language: string) {
+    this.currentState = this.tuple.startState;
     let allCharsInString = language.split('');
     allCharsInString.forEach((char : string) => {
-      this.currentState = this.execute(char,this.currentState);      
+      this.execute(char);      
     });
     return this.isFinalState(this.currentState);
   }

@@ -1,12 +1,13 @@
 import { DFA, Tuple } from "./dfa"; 
 import { EpsilonHandler } from "./epsilonHandler";
 
-export class NFA extends DFA {
+export class NFA {
+  tuple : Tuple;
   currentStates : string[];
   handler : EpsilonHandler;
 
   constructor(tuple : Tuple) {
-    super(tuple);
+    this.tuple = tuple;
     this.currentStates = [tuple.startState];
     this.handler = new EpsilonHandler(tuple.delta);
   }
@@ -15,6 +16,10 @@ export class NFA extends DFA {
     return this.currentStates.some((state) => this.tuple.finalStates.indexOf(state) > -1);
   }
  
+  private execute (alphabet,state) {
+    let nextStates = this.tuple.delta[state][alphabet];
+    return nextStates ? nextStates : [];
+  };
 
   private handleAllStates (alphabet) {
     let nextStates = [];
@@ -27,6 +32,7 @@ export class NFA extends DFA {
   }
 
   public doesAccept (language : string) {
+    this.currentStates = [this.tuple.startState];
     let alphabets = language.split('');
     alphabets.forEach(alphabet => {
       this.handleAllStates(alphabet); 
