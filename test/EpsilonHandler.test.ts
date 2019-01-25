@@ -45,6 +45,6 @@ describe.only("EpsilonHandler",() => {
       }
     };
     let handler = new EpsilonHandler(configuration);
-    expect(handler.handle(["q1"])).toEqual(["q2","q4","q1"]);
+    expect(handler.handle(["q1"])).toEqual(["q1","q2","q4"]);
   })
 })

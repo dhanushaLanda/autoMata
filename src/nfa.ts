@@ -16,7 +16,7 @@ export class NFA {
     return this.currentStates.some((state) => this.tuple.finalStates.indexOf(state) > -1);
   }
  
-  private execute (alphabet : string ,state : string) {
+  private getNextState (alphabet : string ,state : string) {
     let nextStates = this.tuple.delta[state] && this.tuple.delta[state][alphabet];
     return nextStates ? nextStates : 'DEAD' ;
   };
@@ -24,7 +24,7 @@ export class NFA {
   private getNextStates (states,alphabet) {
     let epsilonedStates = this.epsilonHandler.handle(states);
     return epsilonedStates.reduce((nextStates : string [],state) => {
-      nextStates = nextStates.concat(this.execute(alphabet,state));
+      nextStates = nextStates.concat(this.getNextState(alphabet,state));
       return nextStates;
     },[]);
   }
@@ -32,11 +32,9 @@ export class NFA {
   public doesAccept (language : string) {
     let alphabets = language.split('');    
     this.currentStates = [this.tuple.startState];
-
     let nextStates = alphabets.reduce((states,alphabet) => {
       return this.getNextStates(states,alphabet); 
     },this.currentStates);
-
     this.currentStates = this.epsilonHandler.handle(nextStates);
     return this.isSystemInFinalState();
   }

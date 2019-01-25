@@ -11,7 +11,7 @@ export class EpsilonHandler {
 
   private doesHaveEpsilon ( state :string) {
     if (this.configuration[state]) {
-      return this.configuration[state].e != undefined;
+      return this.configuration[state].hasOwnProperty("e");
     }
   }
   
@@ -33,8 +33,8 @@ export class EpsilonHandler {
 
   public handle (currentStates : string[]) {
     return currentStates.reduce((nextStates : string[],state) => {
+      nextStates.push(state);      
       this.getNextEpsilonedStates(state);
-      nextStates.push(state);
       return nextStates;
     },this.handledStates = []);
   }
