@@ -1,8 +1,8 @@
 import { includes } from "../utils";
 export class EpsilonHandler {
 
-  configuration : object;
-  handledStates : string[];
+  private configuration : object;
+  private handledStates : string[];
 
   constructor(configuration) {
     this.handledStates = [];
@@ -10,32 +10,26 @@ export class EpsilonHandler {
   }
 
   private doesHaveEpsilon ( state :string) {
-    if (this.configuration[state]) {
-      return this.configuration[state].hasOwnProperty("e");
-    }
+    return this.configuration[state] && this.configuration[state].hasOwnProperty("e");
   }
   
-  private updateUniqEpsilonedStates (state) {
-    if(!includes(state,this.handledStates) ) {
+  private epsilonStates (state) {
+    if(!includes(state,this.handledStates)) {
       this.handledStates.push(state);
-      this.getNextEpsilonedStates(state);
+      this.getNextEpsilonStates(state);
     }
   }
 
-  private getNextEpsilonedStates(state) {
+  private getNextEpsilonStates(state) {
     if (this.doesHaveEpsilon(state)){
       let epsilonAppliedStates = this.configuration[state].e;
-      epsilonAppliedStates.forEach(epsilonedState => {
-        this.updateUniqEpsilonedStates(epsilonedState);
-      });
+      epsilonAppliedStates.forEach(epsilonedState => this.epsilonStates(epsilonedState));
     };
   }
 
   public handle (currentStates : string[]) {
-    return currentStates.reduce((nextStates : string[],state) => {
-      nextStates.push(state);      
-      this.getNextEpsilonedStates(state);
-      return nextStates;
-    },this.handledStates = []);
+    this.handledStates = [];
+    currentStates.forEach((state) => this.epsilonStates(state));
+    return this.handledStates;
   }
 }
