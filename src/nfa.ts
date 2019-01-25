@@ -17,24 +17,25 @@ export class NFA {
   }
  
   private execute (alphabet : string ,state : string) {
-    let nextStates = this.tuple.delta[state][alphabet];
-    return nextStates ? nextStates : [] ;
+    let nextStates = this.tuple.delta[state] && this.tuple.delta[state][alphabet];
+    return nextStates ? nextStates : 'dead' ;
   };
 
-  private handleAllStates (alphabet) {
-    let epsilonedStates = this.epsilonHandler.handle(this.currentStates);
+  private getNextStates (states,alphabet) {
+    let epsilonedStates = this.epsilonHandler.handle(states);
     return epsilonedStates.reduce((nextStates : string [],state) => {
-      nextStates.push(this.execute(alphabet,state));
+      nextStates = nextStates.concat(this.execute(alphabet,state));
       return nextStates;
     },[]);
   }
 
   public doesAccept (language : string) {
+    let alphabets = language.split('');    
     this.currentStates = [this.tuple.startState];
-    let alphabets = language.split('');
-    alphabets.forEach(alphabet => {
-      this.currentStates=this.handleAllStates(alphabet); 
-    });
+    this.currentStates = alphabets.reduce((states,alphabet) => {
+      return this.getNextStates(states,alphabet); 
+    },this.currentStates);
+    this.currentStates = this.epsilonHandler.handle(this.currentStates);
     return this.isSystemInFinalState();
   }
 }

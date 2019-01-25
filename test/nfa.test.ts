@@ -1,6 +1,6 @@
 
 import { NFA } from "../src/nfa";
-import * as cases from "./testCases/dfaTestCases.json";
+import * as cases from "./testCases/nfaTestCases.json";
 import { assertTrue, assertFalse} from "./assert";
 
 const runAllNfaTests = () => {
