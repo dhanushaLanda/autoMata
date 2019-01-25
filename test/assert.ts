@@ -1,5 +1,8 @@
-export const assertTrue = (entity,testCases) => {
-  describe(`Automata type ${entity.constructor.name}`,()=> {
+import { DFA } from "../src/dfa";
+import { NFA } from "../src/nfa";
+
+export const assertTrue = (entity : DFA | NFA,testCases : string[]) => {
+  describe(`Automata's type ${entity.constructor.name}`,()=> {
     return testCases.map((testCase) => {      
       it(`Should allow "${testCase}"`,() => {
         expect(entity.doesAccept(testCase)).toBeTruthy();
@@ -8,8 +11,8 @@ export const assertTrue = (entity,testCases) => {
   });
 };
 
-export const assertFalse = (entity,testCases) => {
-  describe(`Automata type ${entity.constructor.name}`,()=> {
+export const assertFalse = (entity : DFA | NFA,testCases : string[]) => {
+  describe(`Automata's type ${entity.constructor.name}`,()=> {
     return testCases.map( (testCase) => {
       it(`Should not allow "${testCase}"`,() => {
         expect(entity.doesAccept(testCase)).toBeFalsy();

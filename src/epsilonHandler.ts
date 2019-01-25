@@ -16,14 +16,14 @@ export class EpsilonHandler {
   private epsilonStates (state) {
     if(!includes(state,this.handledStates)) {
       this.handledStates.push(state);
-      this.getNextEpsilonStates(state);
-    }
+      this.nextEpsilonStates(state);
+    };
   }
 
-  private getNextEpsilonStates(state) {
+  private nextEpsilonStates(state) {
     if (this.doesHaveEpsilon(state)){
       let epsilonAppliedStates = this.configuration[state].e;
-      epsilonAppliedStates.forEach(epsilonedState => this.epsilonStates(epsilonedState));
+      epsilonAppliedStates.forEach(epsilonState => this.epsilonStates(epsilonState));
     };
   }
 

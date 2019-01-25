@@ -1,4 +1,4 @@
-import { DFA, Tuple } from "./dfa"; 
+import {  Tuple } from "./dfa";
 import { EpsilonHandler } from "./epsilonHandler";
 import { includes } from "../utils";
 
@@ -16,13 +16,13 @@ export class NFA {
   }
  
   private getNextState (alphabet : string ,state : string) {
-    let nextStates = this.tuple.delta[state];
-    return (nextStates && nextStates[alphabet]) ?  nextStates[alphabet] : 'DEAD' ;
+    let nextStates = this.tuple.delta[state] && this.tuple.delta[state][alphabet];
+    return nextStates ?  nextStates : 'DEAD' ;
   };
 
-  private getNextStates (states,alphabet) {
-    let epsilonedStates = this.epsilonHandler.handle(states);
-    return epsilonedStates.reduce((nextStates : string [],state) => {
+  private translate (states,alphabet) {
+    let epsilonStates = this.epsilonHandler.handle(states);
+    return epsilonStates.reduce((nextStates : string [],state) => {
       nextStates = nextStates.concat(this.getNextState(alphabet,state));
       return nextStates;
     },[]);
@@ -30,9 +30,7 @@ export class NFA {
 
   public doesAccept (language : string) {
     let alphabets = language.split('');    
-    let nextStates = alphabets.reduce((states,alphabet) => {
-      return this.getNextStates(states,alphabet); 
-    },[this.tuple.startState]);
+    let nextStates = alphabets.reduce((states,alphabet) => this.translate(states,alphabet),[this.tuple.startState]); 
     return this.isSystemInFinalState(this.epsilonHandler.handle(nextStates));
   }
 }
